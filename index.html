@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Studio Pro - Manhwa Edition</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --p: #e2d1f9; --pk: #ffdae9; --g: #ffd700; --b: #00d2ff;
+            --bg: #0b141a; --pnl: rgba(23, 33, 39, 0.98); --txt: white;
+        }
+        body {
+            margin: 0; background: var(--bg); color: var(--txt);
+            font-family: 'Segoe UI', sans-serif; height: 100vh;
+            overflow: hidden; user-select: none;
+        }
+
+        /* الإعلان العلوي الثابت */
+        #topBannerAd {
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+            background: rgba(0,0,0,0.8); z-index: 10005; display: flex; justify-content: center; align-items: center;
+        }
+
+        #videoContainer {
+            position: fixed; inset: 60px 0 0 0; z-index: 1; background: #000;
+            display: flex; justify-content: center; align-items: center;
+        }
+        #shortsFrame, #localVideo { width: 100%; height: 100%; border: none; object-fit: cover; }
+
+        /* إعلان وسط الفيديو */
+        #midVideoAd {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10010; display: none; background: rgba(0,0,0,0.9);
+            padding: 10px; border-radius: 15px; border: 1px solid var(--p);
+        }
+
+        /* إعلان الإشعار (أسفل يسار) */
+        #notifAd {
+            position: fixed; bottom: 80px; left: -350px; width: 280px;
+            background: var(--pnl); border-left: 5px solid #00a884;
+            padding: 15px; z-index: 10009; border-radius: 0 10px 10px 0;
+            transition: 0.5s ease-in-out; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        #notifAd.show { left: 0; }
+
+        /* القوائم والأيقونات */
+        .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 2px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; }
+        .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 15px; display: none; z-index: 9000; flex-direction: column; gap: 10px; right: 80px; width: 220px; }
+        
+        #subC { position: fixed; top: 75px; right: 15px; background: var(--pnl); border: 1px solid var(--pk); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
+        #eZone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 8000; pointer-events: none; opacity: 0; text-align: center; width: 90%; }
+        .pop { animation: cP 1.5s ease-out forwards; }
+        @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; } }
+        
+        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; padding: 10px; border-radius: 10px; }
+        input { padding: 10px; border-radius: 10px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="topBannerAd">
+        <script async="async" data-cfasync="false" src="https://pl29310385.profitablecpmratenetwork.com/00e55bc0936560b403e88e60248cee97/invoke.js"></script>
+        <div id="container-00e55bc0936560b403e88e60248cee97"></div>
+    </div>
+
+    <div id="videoContainer">
+        <iframe id="shortsFrame"></iframe>
+        <video id="localVideo" controls autoplay loop playsinline src="A.mp4.mp4"></video>
+    </div>
+
+    <div id="midVideoAd">
+        <script>
+          atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
+        </script>
+        <script src="https://www.highperformanceformat.com/ecd37eb3b51978e4cf1c88fb23e69e0b/invoke.js"></script>
+        <button onclick="document.getElementById('midVideoAd').style.display='none'" style="width:100%; margin-top:10px; background:#ff4f4f">إغلاق X</button>
+    </div>
+
+    <div id="notifAd">
+        <div style="font-size: 12px; color: #00a884; margin-bottom: 5px;">إعلان ممول</div>
+        <script src="https://pl29310381.profitablecpmratenetwork.com/f3/f1/14/f3f11422479a989121f35119a95ea880.js"></script>
+    </div>
+
+    <div id="subC">
+        <i class="fa-solid fa-heart" style="color: #ff4f4f;"></i>
+        <span style="color:var(--pk)">1,405</span>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="node" style="top:130px; right:20px" onclick="UI.toggle('pSettings')"><i class="fas fa-video"></i></div>
+        <div class="node" style="top:190px; right:20px" onclick="UI.toggle('pFilter')"><i class="fas fa-wand-magic-sparkles"></i></div>
+        <div class="node" style="top:250px; right:20px" onclick="UI.toggle('pMagic')"><i class="fas fa-wand-sparkles"></i></div>
+    </div>
+
+    <div id="pSettings" class="glass" style="top:130px">
+        <input type="text" id="ytUrl" placeholder="رابط يوتيوب أو mp4">
+        <button onclick="App.applyMedia()">تشغيل 🎬</button>
+    </div>
+
+    <div id="pFilter" class="glass" style="top:190px">
+        <button onclick="UI.theme('dark')">🌙 ليلي</button>
+        <button onclick="UI.theme('light')">☀️ نهاري</button>
+        <button onclick="UI.filter('none')">❌ حذف الفلاتر</button>
+    </div>
+
+    <div id="pMagic" class="glass" style="top:250px">
+        <button onclick="App.triggerMagic()">إطلاق السحر ✨</button>
+    </div>
+
+    <div id="eZone"></div>
+
+    <script>
+        const localVideo = document.getElementById("localVideo");
+        const midAd = document.getElementById("midVideoAd");
+        const notifAd = document.getElementById("notifAd");
+
+        const App = {
+            applyMedia: () => {
+                const input = document.getElementById("ytUrl").value.trim();
+                const frame = document.getElementById("shortsFrame");
+                if (input.includes('youtube.com') || input.includes('youtu.be')) {
+                    localVideo.style.display = "none"; localVideo.pause();
+                    frame.style.display = "block";
+                    frame.src = `https://www.youtube-nocookie.com/embed/${App.getVID(input)}?autoplay=1`;
+                } else {
+                    frame.style.display = "none";
+                    localVideo.style.display = "block";
+                    localVideo.src = input; localVideo.play();
+                }
+                UI.hideAll();
+            },
+            getVID: (url) => {
+                let v = url.split('v=')[1] || url.split('shorts/')[1] || url.split('youtu.be/')[1];
+                return v ? v.split('&')[0].split('?')[0] : "";
+            },
+            visual: (emoji) => {
+                const z = document.getElementById("eZone");
+                z.innerText = emoji; z.classList.remove("pop"); 
+                void z.offsetWidth; z.classList.add("pop");
+            },
+            triggerMagic: () => { App.visual("✨🌟💎"); UI.hideAll(); }
+        };
+
+        const UI = {
+            toggle: (id) => {
+                const el = document.getElementById(id);
+                const isV = el.style.display === "flex";
+                UI.hideAll();
+                el.style.display = isV ? "none" : "flex";
+            },
+            hideAll: () => { document.querySelectorAll('.glass').forEach(g => g.style.display = "none"); },
+            theme: (m) => { document.body.style.filter = m === 'light' ? 'invert(0)' : 'none'; UI.hideAll(); },
+            filter: (f) => { document.getElementById('videoContainer').style.filter = f; UI.hideAll(); }
+        };
+
+        // --- نظام الإعلانات التلقائي المبرمج ---
+        localVideo.ontimeupdate = () => {
+            let time = localVideo.currentTime;
+
+            // إعلان الإشعار يظهر في الثانية 5 ويختفي في الثانية 15
+            if (time >= 5 && time <= 15) {
+                notifAd.classList.add("show");
+            } else {
+                notifAd.classList.remove("show");
+            }
+
+            // إعلان وسط الفيديو يظهر في الثانية 20 ويختفي في الثانية 30
+            if (time >= 20 && time <= 30) {
+                midAd.style.display = "block";
+            } else if (time > 30) {
+                midAd.style.display = "none";
+            }
+        };
+
+        window.onload = () => {
+            localVideo.play().catch(() => {
+                localVideo.muted = true;
+                localVideo.play();
+            });
+        };
+    </script>
+
+    <script src="https://pl29310384.profitablecpmratenetwork.com/1f/4d/fc/1f4dfcd01832df6433005c331053354d.js"></script>
+
+</body>
+</html>
