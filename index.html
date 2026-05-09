@@ -10,34 +10,28 @@
             --p: #e2d1f9; --pk: #ffdae9; --g: #ffd700; --b: #00d2ff;
             --bg: #0b141a; --pnl: rgba(23, 33, 39, 0.98); --txt: white; --wp: 0.1;
         }
-        .light-theme {
-            --bg: #f0f2f5; --pnl: rgba(255, 255, 255, 0.95); --txt: #111b21; --p: #6a5acd; --wp: 0.4;
-        }
         body {
             margin: 0; background: var(--bg); color: var(--txt);
             font-family: 'Segoe UI', sans-serif; height: 100vh;
             overflow: hidden; transition: 0.5s; user-select: none;
         }
 
-        /* حاوية الفيديو */
         #videoContainer {
             position: fixed; inset: 0; z-index: 1; background: #000;
             display: flex; justify-content: center; align-items: center;
         }
         #localVideo { width: 100%; height: 100%; object-fit: contain; }
 
-        /* أماكن الإعلانات المخصصة */
+        /* إعلانات */
         .ad-corner-top { position: fixed; top: 10px; left: 10px; z-index: 10001; width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid var(--g); background: #000; }
         .ad-notification-bell { position: fixed; bottom: 20px; left: 20px; z-index: 10001; width: 45px; height: 45px; border-radius: 50%; background: #ff4f4f; display: flex; align-items: center; justify-content: center; color: white; animation: ring 2s infinite; }
+        .ad-container-icon { position: fixed; bottom: 75px; left: 20px; z-index: 10001; width: 45px; height: 45px; border-radius: 50%; background: #00d2ff; border: 2px solid white; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: 0 0 10px rgba(0,210,255,0.5); }
+
         @keyframes ring { 0% { transform: scale(1); } 50% { transform: scale(1.1); rotate: 10deg; } 100% { transform: scale(1); } }
         
         .mid-video-ad { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 5; display: none; width: 300px; height: 250px; background: rgba(0,0,0,0.8); border: 1px solid var(--p); }
 
-        #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
-        
-        #sT { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 9999; cursor: pointer; }
         #subC { position: fixed; top: 15px; right: 15px; background: var(--pnl); border: 1px solid var(--pk); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
-        
         .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 2px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; }
         .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 15px; display: none; z-index: 9000; flex-direction: column; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); right: 80px; width: 220px; }
         
@@ -45,40 +39,28 @@
         .pop { animation: cP 1.5s ease-out forwards; }
         @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; } }
 
-        input, button { padding: 10px; border-radius: 10px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: var(--txt); outline: none; }
-        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; }
+        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; padding: 10px; border-radius: 10px; width: 100%; }
+        input { padding: 10px; border-radius: 10px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: white; outline: none; }
     </style>
 </head>
 <body>
 
-<div class="ad-corner-top">
-    <script src="https://pl29310381.profitablecpmratenetwork.com/f3/f1/14/f3f11422479a989121f35119a95ea880.js"></script>
-</div>
-
-<div class="ad-notification-bell">
-    <i class="fas fa-bell"></i>
-    <iframe src="https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b" style="display:none"></iframe>
-</div>
+<div class="ad-corner-top"><script src="https://pl29310381.profitablecpmratenetwork.com/f3/f1/14/f3f11422479a989121f35119a95ea880.js"></script></div>
+<div class="ad-notification-bell"><i class="fas fa-bell"></i><iframe src="https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b" style="display:none"></iframe></div>
+<div class="ad-container-icon"><i class="fas fa-gift"></i><div style="opacity: 0.01; position: absolute; scale: 0.1; pointer-events: none;"><script async="async" data-cfasync="false" src="https://pl29310385.profitablecpmratenetwork.com/00e55bc0936560b403e88e60248cee97/invoke.js"></script><div id="container-00e55bc0936560b403e88e60248cee97"></div></div></div>
 
 <div id="videoContainer">
-    <video id="localVideo" autoplay loop muted playsinline>
+    <video id="localVideo" autoplay loop muted playsinline preload="auto">
         <source src="A.mp4" type="video/mp4">
     </video>
     
     <div id="midAdContainer" class="mid-video-ad">
-        <script>  
-          atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };  
-        </script>  
+        <script>atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };</script>
         <script src="https://www.highperformanceformat.com/ecd37eb3b51978e4cf1c88fb23e69e0b/invoke.js"></script>
     </div>
 </div>
 
-<div id="wp-bg"></div>
-
-<div id="subC">
-    <i class="fa-solid fa-heart" style="color: #ff4f4f;"></i>
-    <span style="color:var(--pk)">1,405</span>
-</div>
+<div id="subC"><i class="fa-solid fa-heart" style="color: #ff4f4f;"></i><span style="color:var(--pk)">1,405</span></div>
 
 <div style="display:flex; flex-direction:column; gap:10px;">
     <div class="node" style="top:70px; right:20px" onclick="UI.toggle('pFilter')"><i class="fas fa-wand-magic-sparkles"></i></div>
@@ -87,66 +69,27 @@
     <div class="node" style="top:250px; right:20px" onclick="UI.toggle('pEmoji')"><i class="fa-solid fa-face-smile"></i></div>
 </div>
 
-<div id="pFilter" class="glass" style="top:70px">
-    <button onclick="UI.theme('dark')">🌙 ثيم ليلي</button>
-    <button onclick="UI.theme('light')">☀️ ثيم نهاري</button>
-    <button onclick="UI.filter('none')">❌ إلغاء الفلاتر</button>
-</div>
-
-<div id="pMagic" class="glass" style="top:130px">
-    <label>عدد العناصر:</label>
-    <input type="number" id="emojiCount" value="5" max="15">
-    <button onclick="App.triggerMagic()">إطلاق 🧚🏼‍♂️</button>
-</div>
-
-<div id="pPhr" class="glass" style="top:190px">
-    <input type="text" id="sPhr" placeholder="رسالة...">
-    <button onclick="App.triggerPhrase()">🔔 إرسال</button>
-</div>
-
-<div id="pEmoji" class="glass" style="top:250px">
-    <div id="emojiGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;"></div>
-</div>
+<div id="pFilter" class="glass" style="top:70px"><button onclick="UI.filter('grayscale(100%)')">🖤 أبيض وأسود</button><button onclick="UI.filter('sepia(80%)')">📜 قديم</button><button onclick="UI.filter('none')">❌ إلغاء</button></div>
+<div id="pMagic" class="glass" style="top:130px"><input type="number" id="emojiCount" value="5"><button onclick="App.triggerMagic()">إطلاق ✨</button></div>
+<div id="pPhr" class="glass" style="top:190px"><input type="text" id="sPhr" placeholder="رسالة..."><button onclick="App.triggerPhrase()">🔔 إرسال</button></div>
+<div id="pEmoji" class="glass" style="top:250px"><div id="emojiGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;"></div></div>
 
 <div id="eZone"></div>
 
-<script async="async" data-cfasync="false" src="https://pl29310385.profitablecpmratenetwork.com/00e55bc0936560b403e88e60248cee97/invoke.js"></script>  
-<div id="container-00e55bc0936560b403e88e60248cee97" style="display:none"></div>
 <script src="https://pl29310384.profitablecpmratenetwork.com/1f/4d/fc/1f4dfcd01832df6433005c331053354d.js"></script>
 
 <script>
     const v = document.getElementById('localVideo');
     const adBox = document.getElementById('midAdContainer');
 
-    v.ontimeupdate = () => {
-        let currentTime = Math.floor(v.currentTime);
-        if(currentTime >= 10 && currentTime <= 25) {
-            adBox.style.display = "block";
-        } else {
-            adBox.style.display = "none";
-        }
-    };
+    function forcePlay() { v.play().catch(() => {}); }
+    window.addEventListener('load', forcePlay);
+    document.addEventListener('touchstart', forcePlay, {once: true});
+    document.addEventListener('click', forcePlay, {once: true});
 
-    const App = {
-        visual: (emoji) => {
-            const z = document.getElementById("eZone");
-            z.innerText = emoji; 
-            z.style.fontSize = "100px";
-            z.classList.remove("pop"); 
-            void z.offsetWidth; 
-            z.classList.add("pop");
-        },
-        triggerMagic: () => {
-            const items = ["🧚🏼‍♂️","🤍","✨","💎","⭐","🌈","🔥","⚡","🌟","🪄","🔮","🧿"];
-            const count = document.getElementById('emojiCount').value;
-            const res = Array.from({length: count}, () => items[Math.floor(Math.random()*items.length)]).join('');
-            UI.hideAll();
-            App.visual(res);
-        },
-        triggerPhrase: () => {
-            const txt = document.getElementById("sPhr").value;
-            if(txt) { UI.hideAll(); App.visual(txt); }
-        }
+    v.ontimeupdate = () => {
+        let cur = Math.floor(v.currentTime);
+        adBox.style.display = (cur >= 10 && cur <= 25) ? "block" : "none";
     };
 
     const UI = {
@@ -154,25 +97,36 @@
             const t = document.getElementById(id);
             const isV = t.style.display === "flex" || t.style.display === "grid";
             UI.hideAll();
-            if (id === 'pEmoji') { t.style.display = isV ? "none" : "grid"; } 
-            else { t.style.display = isV ? "none" : "flex"; }
+            t.style.display = isV ? "none" : (id === 'pEmoji' ? "grid" : "flex");
         },
-        hideAll: () => {
-            document.querySelectorAll('.glass').forEach(p => p.style.display = "none");
-        },
-        theme: (m) => { document.body.className = m + '-theme'; UI.hideAll(); },
+        hideAll: () => { document.querySelectorAll('.glass').forEach(p => p.style.display = "none"); },
         filter: (f) => { document.getElementById('videoContainer').style.filter = f; UI.hideAll(); }
     };
 
-    const emojis = ["💜","💌","💣","🫀","💎","😍","😂","🔥","✨","❤️"];
+    const App = {
+        visual: (txt) => {
+            const z = document.getElementById("eZone");
+            z.innerText = txt; z.classList.remove("pop"); 
+            void z.offsetWidth; z.classList.add("pop");
+        },
+        triggerMagic: () => {
+            const items = ["✨","💎","🔥","🌈","⭐"];
+            const res = Array.from({length: document.getElementById('emojiCount').value}, () => items[Math.floor(Math.random()*items.length)]).join('');
+            UI.hideAll(); App.visual(res);
+        },
+        triggerPhrase: () => {
+            const txt = document.getElementById("sPhr").value;
+            if(txt) { UI.hideAll(); App.visual(txt); }
+        }
+    };
+
+    const emojis = ["❤️","😂","🔥","😍","✨","🙌","💀","💎"];
     const grid = document.getElementById("emojiGrid");
     emojis.forEach(e => {
-        let btn = document.createElement("div");
-        btn.style.fontSize = "24px";
-        btn.style.cursor = "pointer";
-        btn.innerText = e;
-        btn.onclick = () => { UI.hideAll(); App.visual(e); };
-        grid.appendChild(btn);
+        let d = document.createElement("div");
+        d.style.cursor = "pointer"; d.innerText = e;
+        d.onclick = () => { UI.hideAll(); App.visual(e); };
+        grid.appendChild(d);
     });
 </script>
 </body>
