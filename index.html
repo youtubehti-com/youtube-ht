@@ -26,12 +26,11 @@
         }
         #localVideo { width: 100%; height: 100%; object-fit: contain; }
 
-        /* أماكن الإعلانات المخصصة (بعيداً عن الأيقونات) */
+        /* أماكن الإعلانات المخصصة */
         .ad-corner-top { position: fixed; top: 10px; left: 10px; z-index: 10001; width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid var(--g); background: #000; }
         .ad-notification-bell { position: fixed; bottom: 20px; left: 20px; z-index: 10001; width: 45px; height: 45px; border-radius: 50%; background: #ff4f4f; display: flex; align-items: center; justify-content: center; color: white; animation: ring 2s infinite; }
         @keyframes ring { 0% { transform: scale(1); } 50% { transform: scale(1.1); rotate: 10deg; } 100% { transform: scale(1); } }
         
-        /* البانر المدمج وسط الفيديو */
         .mid-video-ad { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); z-index: 5; display: none; width: 300px; height: 250px; background: rgba(0,0,0,0.8); border: 1px solid var(--p); }
 
         #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
@@ -39,7 +38,6 @@
         #sT { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 9999; cursor: pointer; }
         #subC { position: fixed; top: 15px; right: 15px; background: var(--pnl); border: 1px solid var(--pk); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
         
-        /* أيقونات التحكم على اليمين - نظيفة تماماً */
         .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 2px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; }
         .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 15px; display: none; z-index: 9000; flex-direction: column; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); right: 80px; width: 220px; }
         
@@ -61,8 +59,6 @@
     <i class="fas fa-bell"></i>
     <iframe src="https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b" style="display:none"></iframe>
 </div>
-
-<div id="sT"></div> 
 
 <div id="videoContainer">
     <video id="localVideo" autoplay loop muted playsinline>
@@ -119,11 +115,9 @@
 <script src="https://pl29310384.profitablecpmratenetwork.com/1f/4d/fc/1f4dfcd01832df6433005c331053354d.js"></script>
 
 <script>
-    const _0xP = "Ha20262025@"; 
     const v = document.getElementById('localVideo');
     const adBox = document.getElementById('midAdContainer');
 
-    // منطق ظهور الإعلان المدمج (يظهر من الثانية 10 إلى 25)
     v.ontimeupdate = () => {
         let currentTime = Math.floor(v.currentTime);
         if(currentTime >= 10 && currentTime <= 25) {
@@ -160,12 +154,8 @@
             const t = document.getElementById(id);
             const isV = t.style.display === "flex" || t.style.display === "grid";
             UI.hideAll();
-            // إصلاح عرض شبكة الإيموجي
-            if (id === 'pEmoji') {
-                t.style.display = isV ? "none" : "grid";
-            } else {
-                t.style.display = isV ? "none" : "flex";
-            }
+            if (id === 'pEmoji') { t.style.display = isV ? "none" : "grid"; } 
+            else { t.style.display = isV ? "none" : "flex"; }
         },
         hideAll: () => {
             document.querySelectorAll('.glass').forEach(p => p.style.display = "none");
