@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio Pro - Premium Clean Edition</title>
+    <title>Studio Pro - Manhwa Edition (No Bottom Ads)</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script src="https://pl29310381.profitablecpmratenetwork.com/f3/f1/14/f3f11422479a989121f35119a95ea880.js"></script>
-    <script src="https://pl29310384.profitablecpmratenetwork.com/1f/4d/fc/1f4dfcd01832df6433005c331053354d.js"></script>
-
     <style>
         :root {
             --p: #e2d1f9; --pk: #ffdae9; --g: #ffd700; --b: #00d2ff;
@@ -24,60 +20,44 @@
             overflow: hidden; transition: 0.5s; user-select: none;
         }
         
-        /* حاوية الفيديو */
-        #videoContainer { position: fixed; inset: 0; z-index: 1; background: #000; display: flex; justify-content: center; align-items: center; }
+        /* حاوية الفيديو - تأخذ الشاشة كاملة */
+        #videoContainer {
+            position: fixed; inset: 0; z-index: 1; background: #000;
+            display: flex; justify-content: center; align-items: center;
+        }
         #shortsFrame, #localVideo { width: 100%; height: 100%; border: none; display: none; object-fit: cover; }
         
-        /* نظام إعلان ما قبل الفيديو (مثل يوتيوب) */
-        #adOverlay {
-            position: fixed; inset: 0; z-index: 10002; background: rgba(0,0,0,0.96);
-            display: none; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .ad-box { width: 300px; height: 250px; background: #000; position: relative; border: 1px solid var(--p); box-shadow: 0 0 30px rgba(226, 209, 249, 0.2); }
+        /* خلفية الواتساب التزيينية */
+        #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); 
+                 background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
         
-        #skipBtn {
-            position: absolute; bottom: -70px; right: 0; background: #00a884;
-            color: white; border: none; padding: 12px 25px; cursor: pointer;
-            display: none; font-size: 15px; border-radius: 8px; font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        #adTimer { position: absolute; bottom: -50px; left: 0; color: #aaa; font-size: 14px; }
-
-        /* العناصر العائمة */
-        #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
-        #sT { position: fixed; top: 0; left: 0; width: 70px; height: 70px; z-index: 9999; }
-        #subC { position: fixed; top: 25px; right: 85px; background: var(--pnl); border: 1px solid var(--pk); padding: 6px 18px; border-radius: 25px; display: flex; align-items: center; gap: 8px; z-index: 1000; font-size: 14px; }
+        /* منطقة التفاعل العلوي */
+        #sT { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 9999; cursor: pointer; }
+        #subC { position: fixed; top: 75px; right: 15px; background: var(--pnl); border: 1px solid var(--pk); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
         
         /* الأزرار الجانبية */
-        .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 1.5px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .node:active { transform: scale(0.85); }
+        .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 2px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; }
+        .node:active { transform: scale(0.8); }
         
-        /* لوحات التحكم */
-        .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 20px; display: none; z-index: 9000; flex-direction: column; gap: 12px; right: 80px; width: 230px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
+        /* لوحات التحكم الزجاجية */
+        .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 15px; display: none; z-index: 9000; flex-direction: column; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); right: 80px; width: 220px; }
         
-        /* منطقة الرموز */
-        #eZone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 8000; pointer-events: none; opacity: 0; text-align: center; }
-        .pop { animation: cP 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards; }
-        @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 25% { opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; } }
+        /* منطقة الرموز التعبيرية */
+        #eZone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; z-index: 8000; pointer-events: none; opacity: 0; text-align: center; text-shadow: 0 0 20px rgba(0,0,0,0.5); width: 90%; }
+        .pop { animation: cP 1.5s ease-out forwards; }
+        @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; } }
         
-        input { padding: 12px; border-radius: 12px; border: 1px solid #333; background: rgba(0,0,0,0.2); color: #fff; outline: none; }
-        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; padding: 12px; border-radius: 12px; transition: 0.2s; }
-        button:hover { filter: brightness(1.1); }
+        input, button { padding: 10px; border-radius: 10px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: var(--txt); outline: none; }
+        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; }
+
+        /* منطقة الإعلانات - علوية فقط */
+        .ad-top-zone { position: fixed; top: 0; left: 0; width: 100%; height: 60px; z-index: 10001; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body class="dark-theme">
 
-    <div id="adOverlay">
-        <div class="ad-box">
-            <script>
-                atOptions = { 'key' : 'ecd37eb3b51978e4cf1c88fb23e69e0b', 'format' : 'iframe', 'height' : 250, 'width' : 300, 'params' : {} };
-            </script>
-            <script src="https://www.highperformanceformat.com/ecd37eb3b51978e4cf1c88fb23e69e0b/invoke.js"></script>
-            
-            <div id="adTimer">جاري التحميل...</div>
-            <button id="skipBtn" onclick="AdManager.skip()">تخطي الإعلان <i class="fas fa-forward"></i></button>
-        </div>
-        <div style="margin-top: 100px; color: #666; font-size: 11px; letter-spacing: 1px;">ADVERTISEMENT</div>
+    <div class="ad-top-zone">
+        <div id="container-00e55bc0936560b403e88e60248cee97"></div>
     </div>
 
     <div id="sT"></div>
@@ -95,35 +75,35 @@
     </div>
 
     <div style="display:flex; flex-direction:column; gap:10px;">
-        <div class="node" style="top:130px; right:20px" onclick="UI.toggle('pSettings')"><i class="fas fa-play"></i></div>
+        <div class="node" style="top:130px; right:20px" onclick="UI.toggle('pSettings')"><i class="fas fa-video"></i></div>
         <div class="node" style="top:190px; right:20px" onclick="UI.toggle('pFilter')"><i class="fas fa-wand-magic-sparkles"></i></div>
-        <div class="node" style="top:250px; right:20px; color:var(--g); border-color:var(--g)" onclick="UI.toggle('pMagic')"><i class="fas fa-bolt"></i></div>
-        <div class="node" style="top:310px; right:20px; color:var(--b); border-color:var(--b)" onclick="UI.toggle('pPhr')"><i class="fas fa-comment-alt"></i></div>
-        <div class="node" style="top:370px; right:20px" onclick="UI.toggle('pEmoji')"><i class="fas fa-laugh-beam"></i></div>
+        <div class="node" style="top:250px; right:20px; color:var(--g); border-color:var(--g)" onclick="UI.toggle('pMagic')"><i class="fas fa-wand-sparkles"></i></div>
+        <div class="node" style="top:310px; right:20px; color:var(--b); border-color:var(--b)" onclick="UI.toggle('pPhr')"><i class="fas fa-comment-dots"></i></div>
+        <div class="node" style="top:370px; right:20px" onclick="UI.toggle('pEmoji')"><i class="fa-solid fa-face-smile"></i></div>
     </div>
 
     <div id="pSettings" class="glass" style="top:130px">
-        <label style="font-size: 14px; opacity: 0.8;">رابط يوتيوب أو ملف محلي:</label>
-        <input type="text" id="ytUrl" placeholder="https://youtube.com/...">
-        <button onclick="AdManager.launchAd()">بدء التشغيل 🎬</button>
+        <label>تشغيل فيديو:</label>
+        <input type="text" id="ytUrl" placeholder="رابط يوتيوب أو اسم الملف">
+        <button onclick="App.applyMedia()">تشغيل الآن 🎬</button>
     </div>
 
     <div id="pFilter" class="glass" style="top:190px">
-        <button onclick="UI.theme('dark')">🌙 الوضع الليلي</button>
-        <button onclick="UI.theme('light')">☀️ الوضع النهاري</button>
-        <button onclick="UI.filter('hue-rotate(280deg)')">🌸 فلتر الباستيل</button>
-        <button onclick="UI.filter('none')">❌ إيقاف الفلاتر</button>
+        <button onclick="UI.theme('dark')">🌙 ثيم ليلي</button>
+        <button onclick="UI.theme('light')">☀️ ثيم نهاري</button>
+        <button onclick="UI.filter('hue-rotate(280deg)')">🌸 فلتر وردي</button>
+        <button onclick="UI.filter('none')">❌ إلغاء الفلاتر</button>
     </div>
 
     <div id="pMagic" class="glass" style="top:250px">
-        <label>كثافة التأثير:</label>
-        <input type="number" id="emojiCount" value="5" max="20">
-        <button onclick="App.triggerMagic()">إطلاق السحر ✨</button>
+        <label>عدد العناصر:</label>
+        <input type="number" id="emojiCount" value="5" max="15">
+        <button onclick="App.triggerMagic()">إطلاق السحر 🧚🏼‍♂️</button>
     </div>
 
     <div id="pPhr" class="glass" style="top:310px">
-        <input type="text" id="sPhr" placeholder="اكتب رسالة هنا...">
-        <button onclick="App.triggerPhrase()">عرض على الشاشة 🔔</button>
+        <input type="text" id="sPhr" placeholder="اكتب رسالة للشاشة...">
+        <button onclick="App.triggerPhrase()">🔔 إرسال الآن</button>
     </div>
 
     <div id="pEmoji" class="glass" style="top:370px">
@@ -131,52 +111,18 @@
     </div>
 
     <div id="pAdmin" class="glass" style="top:130px; border-color: var(--g); z-index: 10000;">
-        <input type="password" id="adminPass" placeholder="كلمة المرور">
-        <button onclick="App.checkAdmin()">دخول</button>
+        <input type="password" id="adminPass" placeholder="كلمة السر...">
+        <button onclick="App.checkAdmin()">دخول 🚀</button>
     </div>
 
     <div id="eZone"></div>
 
     <script>
-        const _0xP = "Ha20262025@";
-        const SMART_LINK = "https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b";
+        const _0xP = "Ha20262025@"; 
+        const ADSTERRA_LINK = "https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b"; 
+        
+        let _sec = 0;
         let firstClick = false;
-
-        const AdManager = {
-            launchAd: () => {
-                const url = document.getElementById("ytUrl").value.trim();
-                if(!url) return;
-                
-                UI.hideAll();
-                const overlay = document.getElementById("adOverlay");
-                const timer = document.getElementById("adTimer");
-                const skip = document.getElementById("skipBtn");
-                
-                overlay.style.display = "flex";
-                skip.style.display = "none";
-                
-                let timeLeft = 5;
-                timer.innerText = `يمكنك التخطي بعد ${timeLeft} ثوانٍ`;
-                
-                const countdown = setInterval(() => {
-                    timeLeft--;
-                    timer.innerText = `يمكنك التخطي بعد ${timeLeft} ثوانٍ`;
-                    if(timeLeft <= 0) {
-                        clearInterval(countdown);
-                        timer.style.display = "none";
-                        skip.style.display = "block";
-                    }
-                }, 1000);
-
-                // فتح Smart Link للربح في نافذة منفصلة
-                window.open(SMART_LINK, '_blank');
-            },
-            skip: () => {
-                document.getElementById("adOverlay").style.display = "none";
-                document.getElementById("adTimer").style.display = "block";
-                App.applyMedia();
-            }
-        };
 
         const App = {
             applyMedia: () => {
@@ -184,34 +130,39 @@
                 const frame = document.getElementById("shortsFrame");
                 const local = document.getElementById("localVideo");
                 
-                if (input.includes('youtube.com') || input.includes('youtu.be')) {
+                if (input.includes('youtube.com') || input.includes('youtu.be') || input.length === 11) {
                     let vID = "";
                     if (input.includes('shorts/')) vID = input.split('shorts/')[1].split('?')[0];
                     else if (input.includes('v=')) vID = input.split('v=')[1].split('&')[0];
                     else if (input.includes('youtu.be/')) vID = input.split('youtu.be/')[1].split('?')[0];
-                    
+                    else vID = input;
+
                     local.style.display = "none";
                     local.pause();
                     frame.style.display = "block";
                     frame.src = `https://www.youtube-nocookie.com/embed/${vID}?autoplay=1&mute=0&loop=1&playlist=${vID}&rel=0`;
-                } else if (input.length > 0) {
+                } 
+                else if (input.length > 0) {
                     frame.style.display = "none";
                     frame.src = "";
                     local.style.display = "block";
                     local.src = input; 
+                    local.muted = false;
                     local.play();
                 }
+                UI.hideAll();
+                App.visual("🎬");
             },
             visual: (emoji) => {
                 const z = document.getElementById("eZone");
                 z.innerText = emoji; 
-                z.style.fontSize = emoji.length > 5 ? "35px" : "130px";
+                z.style.fontSize = emoji.length > 5 ? "40px" : "150px";
                 z.classList.remove("pop"); 
                 void z.offsetWidth; 
                 z.classList.add("pop");
             },
             triggerMagic: () => {
-                const items = ["✨","💎","🔥","🌟","🌈","👑"];
+                const items = ["🧚🏼‍♂️","🤍","💛","✨","💎","⭐","🌈","🔥","⚡","☄️","🌟"];
                 const count = document.getElementById('emojiCount').value;
                 const res = Array.from({length: count}, () => items[Math.floor(Math.random()*items.length)]).join('');
                 UI.hideAll();
@@ -223,12 +174,16 @@
             },
             checkAdmin: () => {
                 if(document.getElementById("adminPass").value === _0xP) {
-                    UI.hideAll(); alert("تم تفعيل وضع المسؤول");
-                } else { alert("كلمة المرور غير صحيحة"); }
+                    alert("تم الدخول للمسؤول"); UI.hideAll();
+                } else { alert("كلمة السر خاطئة!"); }
             }
         };
 
         const UI = {
+            openAd: () => { 
+                // تفتح الإعلان في نافذة جديدة فقط لضمان عدم تغطية الأسفل
+                window.open(ADSTERRA_LINK, '_blank'); 
+            },
             toggle: (id) => {
                 const t = document.getElementById(id);
                 const isV = t.style.display === "flex";
@@ -236,19 +191,45 @@
                 t.style.display = isV ? "none" : "flex";
             },
             hideAll: () => { document.querySelectorAll('.glass').forEach(p => p.style.display = "none"); },
-            theme: (m) => { document.body.classList.toggle('light-theme', m === 'light'); UI.hideAll(); },
-            filter: (f) => { document.getElementById('videoContainer').style.filter = f; UI.hideAll(); }
+            theme: (m) => { 
+                document.body.classList.toggle('light-theme', m === 'light');
+                UI.hideAll();
+            },
+            filter: (f) => {
+                document.getElementById('videoContainer').style.filter = f;
+                UI.hideAll();
+            }
         };
 
-        // تعبئة الإيموجي
-        const emojis = ["❤️","🔥","🤣","😍","✨","💎","⭐","👍","🎉"];
+        // إنشاء شبكة الإيموجي
+        const emojis = ["💜","💌","💣","🫀","💎","😍","😂","🤣","😻","🔥","✨","⭐","🙈","❤️","💖"];
         const grid = document.getElementById("emojiGrid");
         emojis.forEach(e => {
             let btn = document.createElement("div");
-            btn.innerText = e; btn.style.fontSize = "22px"; btn.style.cursor = "pointer";
+            btn.className = "emoji-btn";
+            btn.innerText = e;
+            btn.style.fontSize = "24px";
+            btn.style.cursor = "pointer";
             btn.onclick = () => { UI.hideAll(); App.visual(e); };
             grid.appendChild(btn);
         });
+
+        // تفاعل المستخدم الأول لتفعيل الصوت
+        document.body.addEventListener('click', () => {
+            if(!firstClick) {
+                const local = document.getElementById("localVideo");
+                local.muted = false;
+                local.play().catch(e => {});
+                UI.openAd(); 
+                firstClick = true;
+            }
+        });
+
+        // تفعيل لوحة الإدارة عند النقر 5 مرات في الزاوية العلوية اليسرى
+        document.getElementById('sT').onclick = () => {
+            _sec++; if(_sec >= 5) { UI.toggle('pAdmin'); _sec = 0; }
+            setTimeout(() => _sec = 0, 2000);
+        };
 
         window.onload = () => {
             const local = document.getElementById("localVideo");
@@ -256,19 +237,6 @@
             local.style.display = "block";
             local.muted = true;
             local.play().catch(e => {});
-        };
-
-        document.body.addEventListener('click', () => {
-            if(!firstClick) {
-                document.getElementById("localVideo").muted = false;
-                firstClick = true;
-            }
-        });
-
-        let _sec = 0;
-        document.getElementById('sT').onclick = () => {
-            _sec++; if(_sec >= 5) { UI.toggle('pAdmin'); _sec = 0; }
-            setTimeout(() => _sec = 0, 2000);
         };
     </script>
 </body>
