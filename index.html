@@ -1,243 +1,98 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Studio Pro - Manhwa Edition (No Bottom Ads)</title>
+#include <opencv2/opencv.hpp>
+#include <dlib/opencv.h>
+#include <dlib/image_processing/frontal_face_detector.h>
+#include <dlib/image_processing.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+using namespace cv;
+
+// دالة محاكاة للحصول على شدة الصوت بناءً على رقم الإطار (في الواقع يتم قراءتها من ملف الـ Audio)
+float getAudioAmplitude(int frameNumber) {
+    // محاكاة موجة صوتية تتغير بين 0 (صمت) و 1 (أعلى صوت) لتبدو الحركة طبيعية مع الكلام
+    return std::abs(std::sin(frameNumber * 0.15f)) * 20.0f; 
+}
+
+int main() {
+    // 1. تحميل كاشف الوجوه ونقاط الملامح من Dlib
+    dlib::frontal_face_detector face_detector = dlib::get_frontal_face_detector();
+    dlib::shape_predictor landmark_predictor;
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --p: #e2d1f9; --pk: #ffdae9; --g: #ffd700; --b: #00d2ff;
-            --bg: #0b141a; --pnl: rgba(23, 33, 39, 0.98); --txt: white; --wp: 0.1;
-        }
-        .light-theme {
-            --bg: #f0f2f5; --pnl: rgba(255, 255, 255, 0.95); --txt: #111b21; --p: #6a5acd; --wp: 0.4;
-        }
-        body {
-            margin: 0; background: var(--bg); color: var(--txt);
-            font-family: 'Segoe UI', sans-serif; height: 100vh;
-            overflow: hidden; transition: 0.5s; user-select: none;
-        }
+    try {
+        // يجب تحميل هذا الملف من موقع dlib ووضعه في نفس مجلد المشروع
+        dlib::deserialize("shape_predictor_68_face_landmarks.dat") >> landmark_predictor;
+    } catch (exception& e) {
+        cerr << "خطأ: لم يتم العثور على ملف shape_predictor_68_face_landmarks.dat" << endl;
+        return -1;
+    }
+
+    // 2. فتح فيديو الشخصية (مثلاً: آدم وهو يتحدث في مدينته المظلمة)
+    VideoCapture cap("adam_character_video.mp4");
+    if (!cap.isOpened()) {
+        cerr << "خطأ: لا يمكن فتح ملف الفيديو." << endl;
+        return -1;
+    }
+
+    // تجهيز نافذة العرض
+    namedWindow("Lip Sync - The Weight of Light", WINDOW_AUTOSIZE);
+    
+    Mat frame;
+    int frameCount = 0;
+
+    while (cap.read(frame)) {
+        frameCount++;
         
-        /* حاوية الفيديو - تأخذ الشاشة كاملة */
-        #videoContainer {
-            position: fixed; inset: 0; z-index: 1; background: #000;
-            display: flex; justify-content: center; align-items: center;
-        }
-        #shortsFrame, #localVideo { width: 100%; height: 100%; border: none; display: none; object-fit: cover; }
+        // تحويل الإطار إلى نظام dlib للتعامل معه
+        dlib::cv_image<dlib::bgr_pixel> dlib_img(frame);
         
-        /* خلفية الواتساب التزيينية */
-        #wp-bg { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: var(--wp); 
-                 background-image: url('https://web.whatsapp.com/img/bg-chat-tile-dark_a4be512e719549d10e05527f6a012d27.png'); }
+        // كشف الوجوه في الإطار
+        std::vector<dlib::rectangle> faces = face_detector(dlib_img);
         
-        /* منطقة التفاعل العلوي */
-        #sT { position: fixed; top: 0; left: 0; width: 60px; height: 60px; z-index: 9999; cursor: pointer; }
-        #subC { position: fixed; top: 75px; right: 15px; background: var(--pnl); border: 1px solid var(--pk); padding: 5px 15px; border-radius: 20px; display: flex; align-items: center; gap: 8px; z-index: 1000; }
-        
-        /* الأزرار الجانبية */
-        .node { position: fixed; width: 50px; height: 50px; background: var(--pnl); border: 2px solid var(--p); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; color: var(--p); transition: 0.3s; }
-        .node:active { transform: scale(0.8); }
-        
-        /* لوحات التحكم الزجاجية */
-        .glass { position: fixed; background: var(--pnl); border: 1px solid var(--p); border-radius: 20px; padding: 15px; display: none; z-index: 9000; flex-direction: column; gap: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); right: 80px; width: 220px; }
-        
-        /* منطقة الرموز التعبيرية */
-        #eZone { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; z-index: 8000; pointer-events: none; opacity: 0; text-align: center; text-shadow: 0 0 20px rgba(0,0,0,0.5); width: 90%; }
-        .pop { animation: cP 1.5s ease-out forwards; }
-        @keyframes cP { 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; } 20% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; } }
-        
-        input, button { padding: 10px; border-radius: 10px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: var(--txt); outline: none; }
-        button { cursor: pointer; font-weight: bold; background: #00a884; color: white; border: none; }
-
-        /* منطقة الإعلانات - علوية فقط */
-        .ad-top-zone { position: fixed; top: 0; left: 0; width: 100%; height: 60px; z-index: 10001; display: flex; justify-content: center; align-items: center; }
-    </style>
-</head>
-<body class="dark-theme">
-
-    <div class="ad-top-zone">
-        <div id="container-00e55bc0936560b403e88e60248cee97"></div>
-    </div>
-
-    <div id="sT"></div>
-
-    <div id="videoContainer">
-        <iframe id="shortsFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <video id="localVideo" controls autoplay loop playsinline></video>
-    </div>
-
-    <div id="wp-bg"></div>
-
-    <div id="subC">
-        <i class="fa-solid fa-heart" style="color: #ff4f4f;"></i>
-        <span style="color:var(--pk)">1,405</span>
-    </div>
-
-    <div style="display:flex; flex-direction:column; gap:10px;">
-        <div class="node" style="top:130px; right:20px" onclick="UI.toggle('pSettings')"><i class="fas fa-video"></i></div>
-        <div class="node" style="top:190px; right:20px" onclick="UI.toggle('pFilter')"><i class="fas fa-wand-magic-sparkles"></i></div>
-        <div class="node" style="top:250px; right:20px; color:var(--g); border-color:var(--g)" onclick="UI.toggle('pMagic')"><i class="fas fa-wand-sparkles"></i></div>
-        <div class="node" style="top:310px; right:20px; color:var(--b); border-color:var(--b)" onclick="UI.toggle('pPhr')"><i class="fas fa-comment-dots"></i></div>
-        <div class="node" style="top:370px; right:20px" onclick="UI.toggle('pEmoji')"><i class="fa-solid fa-face-smile"></i></div>
-    </div>
-
-    <div id="pSettings" class="glass" style="top:130px">
-        <label>تشغيل فيديو:</label>
-        <input type="text" id="ytUrl" placeholder="رابط يوتيوب أو اسم الملف">
-        <button onclick="App.applyMedia()">تشغيل الآن 🎬</button>
-    </div>
-
-    <div id="pFilter" class="glass" style="top:190px">
-        <button onclick="UI.theme('dark')">🌙 ثيم ليلي</button>
-        <button onclick="UI.theme('light')">☀️ ثيم نهاري</button>
-        <button onclick="UI.filter('hue-rotate(280deg)')">🌸 فلتر وردي</button>
-        <button onclick="UI.filter('none')">❌ إلغاء الفلاتر</button>
-    </div>
-
-    <div id="pMagic" class="glass" style="top:250px">
-        <label>عدد العناصر:</label>
-        <input type="number" id="emojiCount" value="5" max="15">
-        <button onclick="App.triggerMagic()">إطلاق السحر 🧚🏼‍♂️</button>
-    </div>
-
-    <div id="pPhr" class="glass" style="top:310px">
-        <input type="text" id="sPhr" placeholder="اكتب رسالة للشاشة...">
-        <button onclick="App.triggerPhrase()">🔔 إرسال الآن</button>
-    </div>
-
-    <div id="pEmoji" class="glass" style="top:370px">
-        <div id="emojiGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;"></div>
-    </div>
-
-    <div id="pAdmin" class="glass" style="top:130px; border-color: var(--g); z-index: 10000;">
-        <input type="password" id="adminPass" placeholder="كلمة السر...">
-        <button onclick="App.checkAdmin()">دخول 🚀</button>
-    </div>
-
-    <div id="eZone"></div>
-
-    <script>
-        const _0xP = "Ha20262025@"; 
-        const ADSTERRA_LINK = "https://www.profitablecpmratenetwork.com/p5xdvi8igm?key=bb15e730477910952e414434bb03be5b"; 
-        
-        let _sec = 0;
-        let firstClick = false;
-
-        const App = {
-            applyMedia: () => {
-                const input = document.getElementById("ytUrl").value.trim();
-                const frame = document.getElementById("shortsFrame");
-                const local = document.getElementById("localVideo");
+        for (const auto& face : faces) {
+            // الحصول على الـ 68 نقطة الخاصة بالوجه
+            dlib::full_object_detection shape = landmark_predictor(dlib_img, face);
+            
+            // نقاط الفم في نظام الـ 68 نقطة تبدأ من النقطة 48 إلى 67
+            // الشفة العليا (نقطة 51، 52، 53) والشفة السفلى (نقطة 57، 58, 59)
+            
+            // جلب شدة الصوت المقابلة للإطار الحالي
+            float audio_intensity = getAudioAmplitude(frameCount);
+            
+            // تعديل النقاط الداخلية للفم برمجياً (تحريك الشفة السفلى للأسفل بناءً على الصوت)
+            for (unsigned long i = 55; i <= 59; ++i) {
+                // تحريك النقاط عمودياً (Y-axis) لفتح الفم
+                Point mouth_point(shape.part(i).x(), shape.part(i).y() + static_cast<int>(audio_intensity));
                 
-                if (input.includes('youtube.com') || input.includes('youtu.be') || input.length === 11) {
-                    let vID = "";
-                    if (input.includes('shorts/')) vID = input.split('shorts/')[1].split('?')[0];
-                    else if (input.includes('v=')) vID = input.split('v=')[1].split('&')[0];
-                    else if (input.includes('youtu.be/')) vID = input.split('youtu.be/')[1].split('?')[0];
-                    else vID = input;
-
-                    local.style.display = "none";
-                    local.pause();
-                    frame.style.display = "block";
-                    frame.src = `https://www.youtube-nocookie.com/embed/${vID}?autoplay=1&mute=0&loop=1&playlist=${vID}&rel=0`;
-                } 
-                else if (input.length > 0) {
-                    frame.style.display = "none";
-                    frame.src = "";
-                    local.style.display = "block";
-                    local.src = input; 
-                    local.muted = false;
-                    local.play();
-                }
-                UI.hideAll();
-                App.visual("🎬");
-            },
-            visual: (emoji) => {
-                const z = document.getElementById("eZone");
-                z.innerText = emoji; 
-                z.style.fontSize = emoji.length > 5 ? "40px" : "150px";
-                z.classList.remove("pop"); 
-                void z.offsetWidth; 
-                z.classList.add("pop");
-            },
-            triggerMagic: () => {
-                const items = ["🧚🏼‍♂️","🤍","💛","✨","💎","⭐","🌈","🔥","⚡","☄️","🌟"];
-                const count = document.getElementById('emojiCount').value;
-                const res = Array.from({length: count}, () => items[Math.floor(Math.random()*items.length)]).join('');
-                UI.hideAll();
-                App.visual(res);
-            },
-            triggerPhrase: () => {
-                const txt = document.getElementById("sPhr").value;
-                if(txt) { UI.hideAll(); App.visual(txt); }
-            },
-            checkAdmin: () => {
-                if(document.getElementById("adminPass").value === _0xP) {
-                    alert("تم الدخول للمسؤول"); UI.hideAll();
-                } else { alert("كلمة السر خاطئة!"); }
+                // رسم تأثير تحريك الفم أو الشفاه باللون الأسود/الوردي لمحاكاة الفتحة
+                circle(frame, mouth_point, 2, Scalar(0, 0, 255), -1);
             }
-        };
-
-        const UI = {
-            openAd: () => { 
-                // تفتح الإعلان في نافذة جديدة فقط لضمان عدم تغطية الأسفل
-                window.open(ADSTERRA_LINK, '_blank'); 
-            },
-            toggle: (id) => {
-                const t = document.getElementById(id);
-                const isV = t.style.display === "flex";
-                UI.hideAll();
-                t.style.display = isV ? "none" : "flex";
-            },
-            hideAll: () => { document.querySelectorAll('.glass').forEach(p => p.style.display = "none"); },
-            theme: (m) => { 
-                document.body.classList.toggle('light-theme', m === 'light');
-                UI.hideAll();
-            },
-            filter: (f) => {
-                document.getElementById('videoContainer').style.filter = f;
-                UI.hideAll();
+            
+            // رسم خطوط الفم الخارجية لتوضيح التحريك (إصدار تجريبي)
+            for (unsigned long i = 48; i < 60; ++i) {
+                Point p1(shape.part(i).x(), shape.part(i).y() + (i >= 55 ? static_cast<int>(audio_intensity) : 0));
+                Point p2(shape.part((i + 1 == 60) ? 48 : i + 1).x(), shape.part((i + 1 == 60) ? 48 : i + 1).y() + ((i + 1 >= 55) ? static_cast<int>(audio_intensity) : 0));
+                line(frame, p1, p2, Scalar(0, 255, 0), 2);
             }
-        };
+        }
+        
+        // إضافة نصوص الخطافات (Hooks) على الشاشة أثناء العرض لدمج السيناريو
+        if (frameCount < 100) {
+            putText(frame, "In this world, if you keep a secret... its weight will burn you.", 
+                    Point(30, 50), FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255, 255, 255), 2);
+        }
 
-        // إنشاء شبكة الإيموجي
-        const emojis = ["💜","💌","💣","🫀","💎","😍","😂","🤣","😻","🔥","✨","⭐","🙈","❤️","💖"];
-        const grid = document.getElementById("emojiGrid");
-        emojis.forEach(e => {
-            let btn = document.createElement("div");
-            btn.className = "emoji-btn";
-            btn.innerText = e;
-            btn.style.fontSize = "24px";
-            btn.style.cursor = "pointer";
-            btn.onclick = () => { UI.hideAll(); App.visual(e); };
-            grid.appendChild(btn);
-        });
-
-        // تفاعل المستخدم الأول لتفعيل الصوت
-        document.body.addEventListener('click', () => {
-            if(!firstClick) {
-                const local = document.getElementById("localVideo");
-                local.muted = false;
-                local.play().catch(e => {});
-                UI.openAd(); 
-                firstClick = true;
-            }
-        });
-
-        // تفعيل لوحة الإدارة عند النقر 5 مرات في الزاوية العلوية اليسرى
-        document.getElementById('sT').onclick = () => {
-            _sec++; if(_sec >= 5) { UI.toggle('pAdmin'); _sec = 0; }
-            setTimeout(() => _sec = 0, 2000);
-        };
-
-        window.onload = () => {
-            const local = document.getElementById("localVideo");
-            local.src = "v3.mp4"; 
-            local.style.display = "block";
-            local.muted = true;
-            local.play().catch(e => {});
-        };
-    </script>
-</body>
-</html>
+        // عرض النتيجة
+        imshow("Lip Sync - The Weight of Light", frame);
+        
+        // إيقاف التشغيل عند الضغط على زر Esc
+        if (waitKey(30) == 27) {
+            break;
+        }
+    }
+    
+    cap.release();
+    destroyAllWindows();
+    return 0;
+}
